@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>岐阜県徳山村</title>
+        <meta name="google" content="notranslate" />
+        <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#" />
+        <meta property="og:title" content="岐阜県徳山村" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://satoshi7190.github.io/tokuyama-village-map/" />
+        <!-- <meta property="og:image" content="./ogp.jpg" /> -->
+        <meta property="og:description" content="岐阜県徳山村の可視化" />
+        <meta name="twitter:card" content="summary" />
+    </head>
+    <body>
+        <div id="map"></div>
+        <div id="overlay" class="overlay"></div>
+        <div id="title"><span class="sub">ダムに沈んだ故郷</span><span class="main">岐阜県徳山村</span></div>
+        <div id="attribute">
+            <div class="wrap">
+                <span> 地図の出典：<a href="https://www.gsi.go.jp/" target="_blank" rel="noopener noreferrer">国土地理院</a></span>
+            </div>
+        </div>
+        <div class="opacity" id="opacity">
+            <span>不透明度</span>
+            <input type="range" class="custom-slider" min="0" max="1" value="0.6" step="0.01" />
+        </div>
+        <button class="basemap-select" id="basemap-select"></button>
+        <script type="module" src="./src/main.ts"></script>
+    </body>
+</html>

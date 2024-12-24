@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Shippori Mincho', serif;
+}
+
+button {
+    padding: 0;
+    border: none;
+    outline: none;
+    font: inherit;
+    color: inherit;
+    background: none;
+}
+
+#map {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+}
+
+/* 出典表示 */
+#attribute {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 0.5rem;
+    width: 100%;
+    height: 40px;
+    color: #ffffff;
+    font-size: 14px;
+    user-select: none;
+    pointer-events: none;
+    overflow-x: hidden;
+    z-index: 10;
+}
+#attribute .wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: end;
+    justify-content: right;
+}
+#attribute span {
+    white-space: nowrap;
+}
+
+#attribute a,
+a:visited {
+    color: #ffffff;
+    pointer-events: auto;
+}
+
+.overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(#003d5e00, #000000);
+    pointer-events: none;
+    z-index: 10;
+}
+
+#title {
+    position: absolute;
+    font-size: 30px;
+    font-weight: 700;
+    top: 5px;
+    left: 5px;
+    z-index: 10;
+    padding: 10px;
+    user-select: none;
+    /* background-color: rgba(255, 255, 255, 0.5); */
+    color: #fff;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    /* gap: 10px; */
+}
+
+#title .sub {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+#title .main {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+/* 透過度スライダー */
+.opacity {
+    z-index: 20;
+    position: fixed;
+    bottom: 20px;
+    width: 100%;
+    padding: 10px;
+    user-select: none;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    gap: 10px;
+    color: #fff;
+}
+/* レンジスライダー */
+.custom-slider {
+    pointer-events: auto;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+    background: transparent;
+    height: 18px;
+    width: 300px;
+    border-radius: 10px;
+    border: solid 2px #ffffff;
+    pointer-events: all;
+}
+.custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: rgb(255, 255, 255);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    /* box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.15); */
+    pointer-events: all;
+}
+.custom-slider::-moz-range-thumb {
+    background: rgb(255, 255, 255);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    /* box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.15); */
+    border: none;
+    pointer-events: all;
+}
+.custom-slider::-moz-focus-outer {
+    border: 0;
+    pointer-events: all;
+}
+.custom-slider:active::-webkit-slider-thumb {
+    /* box-shadow: 0px 5px 10px -2px rgba(0, 0, 0, 0.3); */
+    pointer-events: all;
+}
+
+/* ベースマップ選択 */
+.basemap-select {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    width: 80px;
+    height: 80px;
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    user-select: none;
+    pointer-events: auto;
+    cursor: pointer;
+    border: #ffffff 2px solid;
+    display: grid;
+    place-items: center;
+    /* background: url('https://cyberjapandata.gsi.go.jp/xyz/img/legend.png') no-repeat center center / 100% 100%; */
+}
+
+.basemap-select span {
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+}
+
+.maplibregl-ctrl-top-right {
+    z-index: 20 !important;
+}
+
+/* モバイル */
+@media (max-width: 768px) {
+    /* #attribute .wrap {
+        animation: loop-slide 20s infinite linear, text-feed 20s infinite;
+        justify-content: center;
+    } */
+
+    #title .sub {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    #title .main {
+        font-size: 26px;
+        font-weight: 700;
+    }
+
+    .basemap-select {
+        width: 60px;
+        height: 60px;
+        bottom: 60px;
+    }
+
+    .custom-slider {
+        width: 200px;
+    }
+}
