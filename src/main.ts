@@ -4,6 +4,10 @@ import './style.css'; // CSSファイルのimport
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
+import { useGsiTerrainSource } from 'maplibre-gl-gsi-terrain';
+
+const gsiTerrainSource = useGsiTerrainSource(maplibregl.addProtocol);
+
 import { customProtocol } from './protocol';
 
 const protocolName = 'custom';
@@ -17,6 +21,7 @@ const map = new maplibregl.Map({
         version: 8,
         glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
         sources: {
+            terrain: gsiTerrainSource,
             seamlessphoto: {
                 type: 'raster',
                 tiles: ['https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg'],
@@ -80,10 +85,10 @@ const map = new maplibregl.Map({
         },
         layers: [
             {
-                id: 'seamlessphoto_layer', // レイヤーのID
-                source: 'seamlessphoto', // ソースのID
-                type: 'raster', // データタイプはラスターを指定
-                // maxzoom: 14, // 最大ズームレベル
+                id: 'seamlessphoto_layer',
+                source: 'seamlessphoto',
+                type: 'raster',
+
                 layout: {
                     visibility: 'visible',
                 },
@@ -96,16 +101,15 @@ const map = new maplibregl.Map({
                         12.5,
                         0.7, // ズームレベル 12 での不透明度
                         // ズームレベル 14 での不透明度
-                    ], // 画像の明るさの最大値
+                    ],
                     'raster-saturation': -0.2, // 画像の彩度
                     // 'raster-saturation': -1.0, // 画像の彩度
                 },
             },
             {
-                id: 'pale_layer', // レイヤーのID
-                source: 'pale', // ソースのID
-                type: 'raster', // データタイプはラスターを指定
-                // maxzoom: 14, // 最大ズームレベル
+                id: 'pale_layer',
+                source: 'pale',
+                type: 'raster',
                 layout: {
                     visibility: 'none',
                 },
@@ -113,7 +117,19 @@ const map = new maplibregl.Map({
                     'raster-opacity': 1.0, // 画像の透過度
                     'raster-brightness-max': 1.0, // 画像の明るさの最大値
                     'raster-saturation': -1.0, // 画像の彩度
-                    // 'raster-saturation': -1.0, // 画像の彩度
+                },
+            },
+            {
+                id: 'hillshade_layer',
+                source: 'terrain',
+                type: 'hillshade',
+                layout: {
+                    visibility: 'none',
+                },
+                paint: {
+                    'hillshade-exaggeration': 0.2,
+                    'hillshade-shadow-color': '#000000',
+                    'hillshade-highlight-color': '#ffffff',
                 },
             },
             {
@@ -123,7 +139,6 @@ const map = new maplibregl.Map({
                 maxzoom: 24,
 
                 paint: {
-                    // 'raster-opacity': 1.0,
                     'raster-opacity': 0,
                     'raster-brightness-max': 1.0, // 画像の明るさの最大値
                     'raster-brightness-min': 0.0, // 画像の明るさの最小値
@@ -131,7 +146,6 @@ const map = new maplibregl.Map({
                     // 'raster-hue-rotate': 45, // 画像の色相の回転角度
                 },
             },
-
             // {
             //     'id': 'gsi_v_layer',
             //     'source': 'gsi_v',
@@ -144,7 +158,6 @@ const map = new maplibregl.Map({
             //         'line-blur': 1,
             //     },
             // },
-
             {
                 id: 'tokuyama_layer',
                 source: 'tokuyama',
@@ -187,7 +200,6 @@ const map = new maplibregl.Map({
                 layout: {
                     'text-field': ['get', 'name'],
                     'text-size': 16,
-                    // 'text-anchor': 'bottom',
                 },
                 paint: {
                     'text-color': '#000000',
@@ -197,17 +209,26 @@ const map = new maplibregl.Map({
             },
         ],
     },
-    center: [136.485452, 35.69576], // 地図の中心座標
-    zoom: 13, // 地図の初期ズームレベル
+    center: [136.485452, 35.69576],
+    zoom: 13,
     minZoom: 8.5,
-    // hash: true, // URLに状態を保存
     attributionControl: false,
     maxBounds: [135.636349, 34.892866, 138.273067, 36.754462], // 地図の表示範囲
+    // hash: true, // URLに状態を保存 debug
 });
 
+// debug
 // map._showTileBoundaries = true;
 
 map.addControl(new maplibregl.NavigationControl()); // ナビゲーションコントロールを追加
+map.addControl(
+    new maplibregl.GeolocateControl({
+        positionOptions: {
+            enableHighAccuracy: true,
+        },
+        trackUserLocation: true,
+    }),
+);
 
 map.on('load', () => {
     map.setPaintProperty('custom_layer', 'raster-opacity', [
@@ -262,6 +283,7 @@ basemapButton.addEventListener('click', () => {
     isBasemap = isBasemap === 'seamlessphoto' ? 'pale' : 'seamlessphoto';
     map.setLayoutProperty('seamlessphoto_layer', 'visibility', isBasemap === 'seamlessphoto' ? 'visible' : 'none');
     map.setLayoutProperty('pale_layer', 'visibility', isBasemap === 'pale' ? 'visible' : 'none');
+    map.setLayoutProperty('hillshade_layer', 'visibility', isBasemap === 'pale' ? 'visible' : 'none');
     const url = tileUrl[isBasemap];
 
     basemapButton.style.background = 'url(' + url + ') no-repeat center center / cover';

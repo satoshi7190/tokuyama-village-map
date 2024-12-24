@@ -85,7 +85,7 @@ self.onmessage = async (e) => {
 
     const vectorTile = decodePBF(tile);
 
-    // 湖沼データのレイヤーを取得
+    // 水域データのレイヤーを取得
     const layer = vectorTile.layers['waterarea'];
 
     try {
