@@ -1,8 +1,4 @@
-import { PMTiles } from 'pmtiles';
-import Pbf from 'pbf';
-import { VectorTile } from '@mapbox/vector-tile';
-import { pmtilesPath } from '../../utils';
-
+// バクとるタイルの読み込み
 const loadtile = async (src: string, signal: AbortSignal): Promise<ArrayBuffer> => {
     const response = await fetch(src, { signal: signal });
     if (!response.ok) {
@@ -73,7 +69,7 @@ export class WorkerProtocol {
 
     // 全てのリクエストをキャンセルするメソッド
     cancelAllRequests() {
-        this.pendingRequests.forEach(({ reject, controller }, url) => {
+        this.pendingRequests.forEach(({ reject, controller }) => {
             controller.abort();
             reject(new Error('Request cancelled'));
         });
