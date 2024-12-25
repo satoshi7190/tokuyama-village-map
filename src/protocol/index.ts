@@ -1,5 +1,5 @@
-// バクとるタイルの読み込み
-const loadtile = async (src: string, signal: AbortSignal): Promise<ArrayBuffer> => {
+// ベクトルタイルの読み込み
+const loadVector = async (src: string, signal: AbortSignal): Promise<ArrayBuffer> => {
     const response = await fetch(src, { signal: signal });
     if (!response.ok) {
         throw new Error('Failed to fetch pbf');
@@ -44,12 +44,12 @@ export class WorkerProtocol {
             const x: number = parseInt(match[2], 10);
             const y: number = parseInt(match[3], 10);
 
-            // const imageUrl = `https://cyberjapandata.gsi.go.jp/xyz/pale/${z}/${x}/${y}.png`;
+            // 年代別空中写真のURL
             const imageUrl = `https://cyberjapandata.gsi.go.jp/xyz/gazo1/${z}/${x}/${y}.jpg`;
 
-            // let tile;
+            // ラスタータイルとベクトルタイルのロード
             const [tile, image] = await Promise.all([
-                loadtile(url, controller.signal), // タイルデータのロード
+                loadVector(url, controller.signal), // タイルデータのロード
                 loadImage(imageUrl, controller.signal), // 画像データのロード
             ]);
 
@@ -67,14 +67,6 @@ export class WorkerProtocol {
         }
     }
 
-    // 全てのリクエストをキャンセルするメソッド
-    cancelAllRequests() {
-        this.pendingRequests.forEach(({ reject, controller }) => {
-            controller.abort();
-            reject(new Error('Request cancelled'));
-        });
-        this.pendingRequests.clear();
-    }
     private handleMessage = (e: MessageEvent) => {
         const { id, buffer, error } = e.data;
         if (error) {
@@ -87,6 +79,15 @@ export class WorkerProtocol {
             }
         }
     };
+
+    // // 全てのリクエストをキャンセルするメソッド
+    // cancelAllRequests() {
+    //     this.pendingRequests.forEach(({ reject, controller }) => {
+    //         controller.abort();
+    //         reject(new Error('Request cancelled'));
+    //     });
+    //     this.pendingRequests.clear();
+    // }
 
     private handleError = (e: ErrorEvent) => {
         console.error('Worker error:', e);
@@ -107,6 +108,6 @@ export const customProtocol = (protocolName: string) => {
 
             return workerProtocol.request(imageUrl, abortController);
         },
-        cancelAllRequests: () => workerProtocol.cancelAllRequests(),
+        // cancelAllRequests: () => workerProtocol.cancelAllRequests(),
     };
 };

@@ -3,9 +3,9 @@ import vsSource from './shader/vertex.glsl?raw';
 
 import Pbf from 'pbf';
 import { VectorTile } from '@mapbox/vector-tile';
-
 import earcut from 'earcut';
 
+// ベクトルタイルのデコード
 const decodePBF = (arrayBuffer: ArrayBuffer) => {
     const pbf = new Pbf(arrayBuffer);
     return new VectorTile(pbf);
@@ -16,6 +16,7 @@ let program: WebGLProgram | null = null;
 let positionBuffer: WebGLBuffer | null = null;
 let texture: WebGLTexture | null = null;
 
+// WebGLの初期化
 const initWebGL = (canvas: OffscreenCanvas) => {
     gl = canvas.getContext('webgl2');
     if (!gl) {
