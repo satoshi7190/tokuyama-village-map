@@ -238,7 +238,7 @@ map.on('load', () => {
         11,
         0.0, // ズームレベル 8 の時に不透明度 0.3
         14,
-        0.6, // ズームレベル 14 の時に不透明度 1.0
+        0.5, // ズームレベル 14 の時に不透明度 1.0
     ]);
 });
 
@@ -251,6 +251,7 @@ map.on('click', 'text_layer2', () => {
     });
 });
 
+// 透過度
 const opacitySlider = document.getElementById('opacity') as HTMLInputElement;
 opacitySlider.addEventListener('input', (e: Event) => {
     const target = e.target as HTMLInputElement;
@@ -265,6 +266,12 @@ opacitySlider.addEventListener('input', (e: Event) => {
         14,
         opacity, // ズームレベル 14 の時に不透明度 1.0
     ]);
+
+    const opacity2 = (parseFloat(target.value) * 100).toFixed(0);
+
+    // 値を0〜100%形式で表示
+    const opacityValue = document.getElementById('opacity-value') as HTMLElement;
+    opacityValue.innerText = `${opacity2}%`;
 });
 
 const tileUrl = {
@@ -277,8 +284,9 @@ type TileUrlkey = keyof typeof tileUrl;
 let isBasemap: TileUrlkey = 'seamlessphoto';
 
 const basemapButton = document.getElementById('basemap-select') as HTMLButtonElement;
-basemapButton.style.background = 'url(' + tileUrl[isBasemap] + ') no-repeat center center';
+basemapButton.style.background = 'url(' + tileUrl[isBasemap] + ') no-repeat center center / cover';
 
+// 地図の切り替え
 basemapButton.addEventListener('click', () => {
     isBasemap = isBasemap === 'seamlessphoto' ? 'pale' : 'seamlessphoto';
     map.setLayoutProperty('seamlessphoto_layer', 'visibility', isBasemap === 'seamlessphoto' ? 'visible' : 'none');
